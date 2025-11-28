@@ -1,9 +1,7 @@
 import torch
 from transformers import AutoTokenizer, T5ForConditionalGeneration
 
-# --- Configuration ---
-# NOTE: Update this path if you saved your model to Google Drive!
-# Example: MODEL_PATH = "/content/drive/MyDrive/ByT5_Translation_Project/byt5-finetuned"
+# add the hugging face model path here
 MODEL_PATH= "malinhauglandh/byt5-en-es-translation"
 
 # Match the prefix and max length used during training
