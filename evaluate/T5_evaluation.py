@@ -52,31 +52,31 @@ def chrf_score(ref, hyp, max_n=6, beta=1):
     beta2 = beta * beta
     return (1 + beta2) * CHRP * CHRR / (beta2 * CHRP + CHRR + eps)
 
-def run_T5_eval():
-    # store results
-    refs = df_ref['es'].tolist()
 
-    # clean baseline
-    bleu_clean = sacrebleu.corpus_bleu(refs, [refs]).score
-    chrf_clean = sum(chrf_score(r, r) for r in refs) / len(refs)
+# store results
+refs = df_ref['es'].tolist()
 
-    results = {"clean": {"BLEU": bleu_clean, "CHRF": 100 * chrf_clean}}
+# clean baseline
+bleu_clean = sacrebleu.corpus_bleu(refs, [refs]).score
+chrf_clean = sum(chrf_score(r, r) for r in refs) / len(refs)
 
-    # corrupted versions
-    for i in [1, 2, 3]:
-        hyps = df_hyp[f'es_corruption_{i}'].tolist()
+results = {"clean": {"BLEU": bleu_clean, "CHRF": 100 * chrf_clean}}
 
-        bleu = sacrebleu.corpus_bleu(hyps, [refs]).score
-        chrf_vals = [chrf_score(ref, hyp) for ref, hyp in zip(refs, hyps)]
+# corrupted versions
+for i in [1, 2, 3]:
+    hyps = df_hyp[f'es_corruption_{i}'].tolist()
 
-        results[f'corruption_{i}'] = {
-            "BLEU": bleu,
-            "CHRF": 100 * (sum(chrf_vals) / len(chrf_vals))
-        }
+    bleu = sacrebleu.corpus_bleu(hyps, [refs]).score
+    chrf_vals = [chrf_score(ref, hyp) for ref, hyp in zip(refs, hyps)]
 
-    print("= BLEU & CHRF Scores =\n")
-    print(f"{'Dataset':<15}{'BLEU':<12}{'CHRF'}")
-    print("-" * 35)
+    results[f'corruption_{i}'] = {
+        "BLEU": bleu,
+        "CHRF": 100 * (sum(chrf_vals) / len(chrf_vals))
+    }
 
-    for key, vals in results.items():
-        print(f"{key:<15}{vals['BLEU']:<12.4f}{vals['CHRF']:.4f}")
+print("= BLEU & CHRF Scores =\n")
+print(f"{'Dataset':<15}{'BLEU':<12}{'CHRF'}")
+print("-" * 35)
+
+for key, vals in results.items():
+    print(f"{key:<15}{vals['BLEU']:<12.4f}{vals['CHRF']:.4f}")
