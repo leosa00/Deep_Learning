@@ -91,3 +91,5 @@ xxhash==3.6.0
 yarl==1.22.0
 evaluate
 sacrebleu
+matplotlib
+sentence_transformers
