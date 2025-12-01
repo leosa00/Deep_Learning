@@ -93,3 +93,4 @@ evaluate
 sacrebleu
 matplotlib
 sentence_transformers
+kagglehub
